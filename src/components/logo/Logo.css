@@ -1,0 +1,8 @@
+.logo-container {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.logo-image {
+    height: 150px;
+}

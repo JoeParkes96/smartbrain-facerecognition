@@ -1,0 +1,11 @@
+.descriptive-text {
+    color: white;
+}
+
+.rank-number {
+    font-size: 3em;
+    font-weight: 900;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #66bfc7;
+}

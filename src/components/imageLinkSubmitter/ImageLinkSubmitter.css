@@ -1,0 +1,31 @@
+.image-link-input, .image-submit-button {
+    padding: 4px;
+    border-radius: 0.5em;
+}
+
+.image-link-input{
+    width: 70%;
+    border: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.image-submit-button {
+    width: 30%;
+    background-color: #66bfc7;
+    border-color: #66bfc7;
+    color: white;
+    font-size: 1.05em;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.image-submit-button:hover {
+    background-color: #FFBC81;
+    border-color: #FFBC81;
+}
+
+.form-wrapper {
+    width: 500px;
+    padding: 4px;
+}

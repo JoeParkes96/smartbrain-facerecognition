@@ -1,0 +1,21 @@
+.nav-bar {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 30px;
+    cursor: pointer;
+    color: white;
+}
+
+.sign-out-button {
+    background-color: #66bfc7;
+    margin-top: 10px;
+    border-radius: 1em;
+}
+
+.sign-out-button:hover {
+    background-color: #FFBC81;
+}
+
+.sign-out-button p {
+    padding: 0 10px;
+}
