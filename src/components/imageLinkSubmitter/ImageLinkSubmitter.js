@@ -2,7 +2,7 @@ import './ImageLinkSubmitter.css';
 
 import React from 'react';
 
-const ImageLinkSubmitter = () => {
+const ImageLinkSubmitter = ({ onInputChange, onSubmit }) => {
     return (
         <div className="image-link-submitter">
             <p className="descriptive-text">
@@ -10,8 +10,8 @@ const ImageLinkSubmitter = () => {
             </p>
             <div className="input-section center">
                 <div className="form-wrapper center">
-                    <input type="text" className="image-link-input center"></input>
-                    <button className="image-submit-button center">Submit</button>
+                    <input type="text" className="image-link-input center" onChange={onInputChange}></input>
+                    <button className="image-submit-button center" onClick={onSubmit}>Submit</button>
                 </div>
             </div>
             
