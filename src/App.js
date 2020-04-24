@@ -1,6 +1,6 @@
 import './App.css';
 
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 
 import Clarifai from 'clarifai';
 import ImageLinkSubmitter from './components/imageLinkSubmitter/ImageLinkSubmitter';
@@ -8,6 +8,8 @@ import Logo from './components/logo/Logo';
 import Navigation from './components/navigation/Navigation';
 import Particles from 'react-particles-js';
 import RecognitionImage from './components/recognitionImage/RecognitionImage';
+import Register from './components/register/Register';
+import SignIn from './components/signIn/SignIn';
 import UserRank from './components/userRank/UserRank';
 
 const clarifaiApp = new Clarifai.App({
@@ -39,7 +41,10 @@ class App extends Component {
     this.state = {
       input: '',
       imageURL: '',
-      box: {}
+      box: {},
+      route: 'signIn',
+      routes: ['signIn', 'register', 'home'],
+      isSignedIn: false
     };
   }
 
@@ -54,6 +59,19 @@ calculateFaceLocation = (data) => {
     rightCol: imageWidth - (boundingBox.right_col * imageWidth),
     bottomRow: imageHeight - (boundingBox.bottom_row * imageHeight) 
   };
+}
+
+onChangeRoute = (route) => {
+  if(this.state.routes.includes(route)) {
+    if (route === 'signIn') {
+      this.setState({isSignedIn: false})
+    } else if (route === 'home') {
+      this.setState({isSignedIn: true})
+    }
+    this.setState({route: route});
+  } else {
+    throw new Error('Invalid route');
+  }
 }
 
 setBoxLocation = (boundingBox) => {
@@ -72,14 +90,25 @@ onSubmit = () => {
 }
 
   render() {
+    const { isSignedIn, route, imageURL, box } = this.state;
     return (
       <div className="App">
         <Particles className="particles-background" params={particleParameters}/>
-        <Navigation />
-        <Logo />
-        <UserRank />
-        <ImageLinkSubmitter onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-        <RecognitionImage imageURL={this.state.imageURL} box={this.state.box} />
+        <Navigation onChangeRoute={this.onChangeRoute} isSignedIn={isSignedIn} />
+        { route === 'home' 
+        ? <Fragment>
+            <Logo />
+            <UserRank />
+            <ImageLinkSubmitter onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
+            <RecognitionImage imageURL={imageURL} box={box} />
+        </Fragment>
+        : (
+          route === 'signIn'
+          ? <SignIn onChangeRoute={this.onChangeRoute}/>
+          : <Register onChangeRoute={this.onChangeRoute}/>
+          
+        )
+      }
       </div>
     );
   }
