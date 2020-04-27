@@ -6,16 +6,20 @@
     color: white;
 }
 
-.sign-out-button {
+.nav-button {
     background-color: #66bfc7;
-    margin-top: 10px;
+    margin: 10px 0 0 10px;
+    border: none;
     border-radius: 1em;
+    font-size: 16px;
+    color: white;
+    padding: 16px;
 }
 
-.sign-out-button:hover {
+.nav-button:hover {
     background-color: #FFBC81;
 }
 
-.sign-out-button p {
+.nav-button p {
     padding: 0 10px;
 }

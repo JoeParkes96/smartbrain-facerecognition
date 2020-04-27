@@ -1,0 +1,54 @@
+.form-container {
+    width: 500px;
+}
+
+legend {
+    color: #66bfc7;
+    font-weight: 900;
+    font-size: 1.5em;
+}
+
+.sign-in-button {
+    background-color: #66bfc7;
+    color: white;
+    cursor: pointer;
+    border: none;
+    margin-top: 20px;
+    border-radius: 1em;
+    font-size: 14px;
+    color: white;
+    padding: 10px;
+}
+
+.sign-in-button:hover {
+    background-color: #FFBC81;
+}
+
+.register {
+    cursor: pointer;
+    color: #FFBC81;
+    text-decoration: underline;
+    font-size: 0.75em;
+}
+
+.register:hover {
+    color: #66bfc7;
+}
+
+.input-item {
+    margin-top: 10px;
+}
+
+label {
+    display: flex;
+    justify-content: center;
+    color: white;
+}
+
+fieldset {
+    border-radius: 1em;
+}
+
+input {
+    width: 60%;
+}
