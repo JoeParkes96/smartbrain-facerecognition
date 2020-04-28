@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 // TODO: use bcrypt to encrypt passwords once database is set up
 // const bcrypt = require('bcryptjs');
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // Hard coded data to be replaced once DB is linked
 const database = {
@@ -34,7 +36,7 @@ app.get('/', (req, res) => {
 app.post('/signin', (req, res) => {
     const { email, password } = req.body;
     if(checkUserCredentials(email, password)) {
-            res.json('success');
+            res.json(database.users[0]);
         } else {
             res.status(400).json('incorrect credentials');
         }
