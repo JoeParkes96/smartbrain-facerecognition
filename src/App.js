@@ -21,7 +21,7 @@ const particleParameters = {
     line_linked: {
       shadow: {
         enable: true,
-        color: "#3CA9D1",
+        color: "#FFBC81",
         blur: 5
       }
     },
@@ -33,26 +33,28 @@ const particleParameters = {
       }
     }
   }
-}
+};
+
+const initialState = {
+  input: '',
+  imageURL: '',
+  box: {},
+  route: 'signIn',
+  routes: ['signIn', 'register', 'home'],
+  isSignedIn: false,
+  user: {
+      id: '',
+      name: '',
+      email: '',
+      submissions: 0,
+      dateJoined: ''
+  }
+};
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imageURL: '',
-      box: {},
-      route: 'signIn',
-      routes: ['signIn', 'register', 'home'],
-      isSignedIn: false,
-      user: {
-          id: '',
-          name: '',
-          email: '',
-          submissions: 0,
-          dateJoined: ''
-      }
-    };
+    this.state = initialState;
   }
 
   loadUser = (data) => {
@@ -78,7 +80,8 @@ class App extends Component {
         .then(response => response.json())
         .then(count => {
             this.setState(Object.assign(this.state.user, {submissions: count}))
-        });
+        })
+        .catch(err => console.log(err));
   }
 
 calculateFaceLocation = (data) => {
@@ -97,9 +100,9 @@ calculateFaceLocation = (data) => {
 onChangeRoute = (route) => {
   if(this.state.routes.includes(route)) {
     if (route === 'signIn') {
-      this.setState({isSignedIn: false})
+      this.setState(initialState);
     } else if (route === 'home') {
-      this.setState({isSignedIn: true})
+      this.setState({isSignedIn: true});
     }
     this.setState({route: route});
   } else {

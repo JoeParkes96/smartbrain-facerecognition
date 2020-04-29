@@ -13,23 +13,28 @@ class Register extends Component {
     }
 
     onRegister = () => {
-        fetch('http://localhost:3000/register',
-        {
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                name: this.state.name,
-                email: this.state.email,
-                password: this.state.password
+        if(this.checkInputIsValid()) {
+            fetch('http://localhost:3000/register',
+            {
+                method: 'post',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    name: this.state.name,
+                    email: this.state.email,
+                    password: this.state.password
+                })
             })
-        })
-        .then(response => response.json())
-        .then(user => {
-            if (user.id) {
-                this.props.loadUser(user);
-                this.props.onChangeRoute('home');
-            }
-        });
+            .then(response => response.json())
+            .then(user => {
+                if (user.id) {
+                    this.props.loadUser(user);
+                    this.props.onChangeRoute('home');
+                }
+            })
+            .catch(err => console.log(err));
+        } else {
+            throw Error('Invalid input');
+        }
     }
 
     onNameChange = (event) => {
@@ -69,6 +74,10 @@ class Register extends Component {
                 </div>
             </div>
         );
+    }
+
+    checkInputIsValid = () => {
+        return this.state.name  !== '' && this.state.email !== '' && this.state.password !== '';
     }
 }
 
