@@ -2,14 +2,14 @@ import './UserRank.css'
 
 import React from 'react';
 
-const UserRank = () => {
+const UserRank = ({name, submissions}) => {
     return (
         <div className="user-rank-section">
             <p className="descriptive-text">
-                {'Joe, your user rank is'}
+                {`${name}, your submission count is`}
             </p>
             <p className="rank-number">
-                {'#5'}
+                {`${submissions}`}
             </p>
         </div>
     );
