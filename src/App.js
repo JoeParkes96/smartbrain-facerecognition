@@ -64,7 +64,7 @@ class App extends Component {
   }
 
   updateUserSubmissionCount = () => {
-    fetch('http://localhost:3000/image',
+    fetch('https://immense-refuge-48530.herokuapp.com/image',
         {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
@@ -115,7 +115,7 @@ onInputChange = (event) => {
 
 onImageSubmit = () => {
   this.setState({imageURL: this.state.input})
-  fetch('http://localhost:3000/imageUrl',
+  fetch('https://immense-refuge-48530.herokuapp.com/imageUrl',
         {
             method: 'post',
             headers: {'Content-Type': 'application/json'},

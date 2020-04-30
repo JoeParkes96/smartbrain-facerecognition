@@ -31,7 +31,7 @@ class Register extends Component {
 
     onRegister = () => {
         if(this.validateForm(this.state.validationErrors)) {
-            fetch('http://localhost:3000/register',
+            fetch('https://immense-refuge-48530.herokuapp.com/register',
             {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
