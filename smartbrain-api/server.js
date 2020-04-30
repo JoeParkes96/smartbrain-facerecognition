@@ -33,6 +33,8 @@ app.get('/profile/:id', (req, res) => {profileController.handleGetProfile(req, r
 
 app.put('/image', (req, res) => {imageController.handleSubmitImage(req, res, db)});
 
+app.post('/imageUrl', (req, res) => {imageController.handleClarifaiApiCall(req, res)});
+
 app.listen(3000, () => {
     console.log('App is running');
 });

@@ -2,7 +2,6 @@ import './App.css';
 
 import React, {Component, Fragment} from 'react';
 
-import Clarifai from 'clarifai';
 import ImageLinkSubmitter from './components/imageLinkSubmitter/ImageLinkSubmitter';
 import Logo from './components/logo/Logo';
 import Navigation from './components/navigation/Navigation';
@@ -11,10 +10,6 @@ import RecognitionImage from './components/recognitionImage/RecognitionImage';
 import Register from './components/register/Register';
 import SignIn from './components/signIn/SignIn';
 import UserRank from './components/userRank/UserRank';
-
-const clarifaiApp = new Clarifai.App({
-  apiKey: 'fb6166db2fa24710b76d6c4934536353'
- });
 
 const particleParameters = {
   particles: {
@@ -120,7 +115,15 @@ onInputChange = (event) => {
 
 onImageSubmit = () => {
   this.setState({imageURL: this.state.input})
-  clarifaiApp.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+  fetch('http://localhost:3000/imageUrl',
+        {
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                input: this.state.input
+            })
+        })
+  .then(response => response.json())
   .then((response) => {
     if(response) {
       this.updateUserSubmissionCount();
