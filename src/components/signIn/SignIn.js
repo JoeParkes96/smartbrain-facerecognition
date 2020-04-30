@@ -68,13 +68,13 @@ class SignIn extends Component{
                 message: 'Email or password are incorrect',
                 display: true
             };
+            this.setState({credentialsErrors: errors});
         } else if (responseJson.id) {
             this.clearCredentialsErrorsState();
+            this.setState({credentialsErrors: errors});
             this.props.loadUser(responseJson);
             this.props.onChangeRoute('home');
         }
-
-        this.setState({credentialsErrors: errors});
     }
 
     render() {
