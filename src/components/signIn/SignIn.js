@@ -2,50 +2,86 @@ import './SignIn.css';
 
 import React, { Component } from 'react';
 
+const validEmailRegex = 
+  RegExp(/^(([^<>()[\].,;:\s@"]+(.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+.)+[^<>()[\].,;:\s@"]{2,})$/i);
+
 class SignIn extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            signInEmail: '',
-            signInPassword: ''
+            email: '',
+            password: '',
+            credentialsErrors: {
+                message: '',
+                display: false
+            },
+            validationErrors: {
+                email: {
+                    message: '',
+                    display: false
+                },
+                password: {
+                    message: '',
+                    display: false
+                }
+            }
         };
     }
     
     onEmailChange = (event) => {
-        this.setState({signInEmail: event.target.value});
+        if (this.validateInputChange(event))
+            this.setState({email: event.target.value});
+            this.clearCredentialsErrorsState();
     }
 
     onPasswordChange = (event) => {
-        this.setState({signInPassword: event.target.value});
+        if (this.validateInputChange(event))
+            this.setState({password: event.target.value});
+            this.clearCredentialsErrorsState();
     }
 
     onSubmit = () => {
-        if (this.state.signInEmail !== '' && this.state.signInPassword !== '') {
+        if (this.validateForm(this.state.validationErrors)) {
             fetch('http://localhost:3000/signin',
             {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    email: this.state.signInEmail,
-                    password: this.state.signInPassword
+                    email: this.state.email,
+                    password: this.state.password
                 })
             })
             .then(response => response.json())
-            .then(user => {
-                if (user.id) {
-                    this.props.loadUser(user);
-                    this.props.onChangeRoute('home');
-                }
+            .then(responseJson => {
+                this.handleSignInResponse(responseJson);
             })
             .catch(err => console.log(err));
         } else {
-            throw Error('Invalid input');
+            console.error('Invalid form');
         }
-        
+    }
+
+    handleSignInResponse = (responseJson) => {
+        let errors = this.state.credentialsErrors;
+        if (responseJson === 'Incorrect credentials') {
+            errors = {
+                message: 'Email or password are incorrect',
+                display: true
+            };
+        } else if (responseJson.id) {
+            this.clearCredentialsErrorsState();
+            this.props.loadUser(responseJson);
+            this.props.onChangeRoute('home');
+        }
+
+        this.setState({credentialsErrors: errors});
     }
 
     render() {
        const { onChangeRoute } = this.props;
+       const emailErrors = this.state.validationErrors.email;
+       const passwordErrors = this.state.validationErrors.password;
+       const credentialsErrors = this.state.credentialsErrors;
 
         return (
             <div className="center">
@@ -54,14 +90,17 @@ class SignIn extends Component{
                         <legend>Sign In</legend>
                         <div className="input-item">
                             <label htmlFor="email">Email</label>
-                            <input type="email" id="email" name="email" onChange={this.onEmailChange} />    
+                            <input type="email" id="email" name="email" onChange={this.onEmailChange} required/> 
+                            <span className={this.getInputStateClass(emailErrors.display)}>{emailErrors.message}</span>    
                         </div>
                         <div className="input-item">
                             <label htmlFor="password">Password</label>
-                            <input type="password" id="password" name="password" onChange={this.onPasswordChange} />
+                            <input type="password" id="password" name="password" onChange={this.onPasswordChange} required/> 
+                            <span className={this.getInputStateClass(passwordErrors.display)}>{passwordErrors.message}</span>
                         </div>
-                        <div>
+                        <div className="submit-item">
                             <button className="sign-in-button" onClick={this.onSubmit}>Sign In</button>
+                            <span className={this.getInputStateClass(credentialsErrors.display)}>{credentialsErrors.message}</span>
                         </div>
                         <div>
                             <p className="register" onClick={() => onChangeRoute('register')}>Register</p>
@@ -70,6 +109,54 @@ class SignIn extends Component{
                 </div>
             </div>
         );
+    }
+
+    validateInputChange = (event) => {
+        const { name, value } = event.target;
+        let errors = this.state.validationErrors;
+        switch(name) {
+            case 'email':
+                const isEmailValid =  validEmailRegex.test(value);
+                errors.email.message = isEmailValid ? '' : 'Email is not valid';
+                errors.email.display= isEmailValid ? false : true;
+                break;
+            case 'password':
+                const isPasswordValid = value.length >= 8;
+                errors.password.message = isPasswordValid ? '' : 'Password must be 8 or more characters';
+                errors.password.display = isPasswordValid ? false : true;
+                break;
+            default:
+                throw Error('Invlaid input type');
+        }
+
+        this.setState({errors, [name]: value});
+    }
+
+    validateForm = (errors) => {
+        let valid = true;
+        if (this.state.email === '' || this.state.password === '') {
+            valid = false;
+        } else {
+            Object.values(errors).forEach(error  => {
+                if (error.message.length > 0)
+                    valid = false;
+            });
+        }
+
+        return valid;
+    }
+
+    getInputStateClass = (isError) => {
+        return isError ? 'error' : 'hidden';
+    }
+
+    clearCredentialsErrorsState = () => {
+        let credentialsErrors = this.state.credentialsErrors;
+        credentialsErrors = {
+            message: '',
+            display: false
+        };
+        this.setState({credentialsErrors});
     }
 }
 
